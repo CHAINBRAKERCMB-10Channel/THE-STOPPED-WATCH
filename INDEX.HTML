@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE STOPPED WATCH – Season 1 // The Watch List</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --orange: #ff4d00;
+    --text: #f0f0f0;
+    --muted: #999;
+    --card: #141414;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+  header {
+    width: 100%;
+    max-width: 900px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #222;
+  }
+  .logo {
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 14px;
+    color: var(--orange);
+  }
+  .page-indicator {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .book-container {
+    width: 100%;
+    max-width: 900px;
+    height: 70vh;
+    min-height: 520px;
+    perspective: 2000px;
+    margin: 20px 0;
+    position: relative;
+  }
+  .page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--card);
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    padding: 40px 48px;
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+    transform-origin: left center;
+    transition: transform 0.6s ease, opacity 0.4s ease;
+  }
+  .page.active {
+    display: flex;
+    z-index: 10;
+  }
+  .page h1 {
+    font-size: 28px;
+    color: var(--orange);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .page h2 {
+    font-size: 18px;
+    color: #ccc;
+    margin-bottom: 24px;
+    font-weight: 400;
+  }
+  .page p {
+    line-height: 1.7;
+    margin-bottom: 16px;
+    font-size: 15px;
+  }
+  .page .tag {
+    display: inline-block;
+    background: var(--orange);
+    color: #000;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .page .quote {
+    font-style: italic;
+    border-left: 3px solid var(--orange);
+    padding-left: 16px;
+    margin: 20px 0;
+    color: #ddd;
+  }
+  .page .protocol {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+  }
+  .page .protocol div {
+    background: #1f1f1f;
+    border: 1px solid #333;
+    padding: 12px 16px;
+    border-radius: 6px;
+    text-align: center;
+    min-width: 100px;
+  }
+  .page .protocol span {
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--orange);
+  }
+  .nav {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 30px;
+  }
+  .nav button {
+    background: transparent;
+    border: 1px solid #444;
+    color: var(--text);
+    padding: 10px 22px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  .nav button:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+  }
+  .nav button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .footer-note {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    max-width: 700px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .case-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .case-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 14px;
+  }
+  .case-card strong {
+    color: var(--orange);
+    font-size: 13px;
+  }
+  .case-card p {
+    font-size: 13px;
+    margin: 6px 0 0;
+    color: #bbb;
+  }
+  @media (max-width: 600px) {
+    .page { padding: 24px 20px; }
+    .page h1 { font-size: 22px; }
+    .book-container { height: 65vh; min-height: 420px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">THE STOPPED WATCH</div>
+  <div class="page-indicator"><span id="currentPage">1</span> / <span id="totalPages">11</span></div>
+</header>
+
+<div class="book-container" id="book">
+  <!-- PAGE 0 : Cover / Episode 0 Intro -->
+  <div class="page active" data-page="0">
+    <div class="tag">EPISODE 0 • ORIGIN</div>
+    <h1>HORIZON</h1>
+    <h2>The true beginning of The Stopped Watch</h2>
+    <p>One ordinary morning. A car left at a local shop for routine maintenance. A mild stroke during a normal test drive. Nine vehicles involved.</p>
+    <p>And on the asphalt — a Tissot watch that was supposed to be in the center console, still ticking.</p>
+    <div class="quote">
+      “I painted Horizon long before I understood what it was saying.<br>
+      A dark figure. An open sky. Someone standing at the edge of something.”
+    </div>
+    <p>From that silence, Lolo Tagapu was born — the quiet collector of stopped watches, and the voice of a simple rule that could save lives.</p>
+  </div>
+
+  <!-- PAGE 1 : The Story -->
+  <div class="page" data-page="1">
+    <div class="tag">EPISODE 0 • THE TRUE STORY</div>
+    <h1>What Really Happened</h1>
+    <p>The car was brought in for an oil change and a check of the clutch and braking system. The owner left for a meeting thirty minutes away, planning to pick it up afterward.</p>
+    <p>After service, the mechanic’s brother took the vehicle out for a standard test drive — normal shop protocol.</p>
+    <p>No one knew a mild stroke was about to occur.</p>
+    <p>He struck the first vehicle. Stopped. Felt threatened by bystanders. In confusion and panic he drove on, heading back toward the shop. The chain continued until nine vehicles were involved.</p>
+    <p>His later account: he was running to survive because he felt his life was threatened.</p>
+    <div class="quote">
+      One second. One medical event.<br>
+      Nine vehicles. One watch still ticking on the asphalt.
+    </div>
+  </div>
+
+  <!-- PAGE 2 : The Meaning -->
+  <div class="page" data-page="2">
+    <div class="tag">EPISODE 0 • THE MEANING</div>
+    <h1>The Watch That Kept Beating</h1>
+    <p>Among the debris was the owner’s Tissot — the watch that had been sitting in the center console. It was still ticking.</p>
+    <p>That image became the heart of the project: time that continues even after chaos. A heartbeat that refuses to stop.</p>
+    <p>From the original painting <em>HORIZON</em> and from that day, the figure of <strong>Lolo Tagapu</strong> fully formed — an old man who collects stopped watches “for honor,” and who speaks only one quiet warning:</p>
+    <div class="quote">
+      “10 seconds lang, anak.<br>
+      Pause. Look. Wait.”
+    </div>
+    <p>This episode is not only remembrance. It is a warning offered so that others may still come home.</p>
+  </div>
+
+  <!-- PAGE 3 : The Protocol -->
+  <div class="page" data-page="3">
+    <div class="tag">THE RULE</div>
+    <h1>00:10 Protocol</h1>
+    <h2>Ten seconds that can change everything</h2>
+    <div class="protocol">
+      <div><span>03</span>PAUSE</div>
+      <div><span>04</span>LOOK</div>
+      <div><span>03</span>WAIT</div>
+    </div>
+    <p>At every intersection, every exit, every moment of uncertainty — take ten full seconds.</p>
+    <p>Most tragedies on the road are not about evil. They are about the seconds we do not take.</p>
+    <div class="quote">
+      A watch that must be watched.<br>
+      Distraction stops time.<br>
+      Stay alert. Arrive alive.
+    </div>
+  </div>
+
+  <!-- PAGE 4 : The Watch List -->
+  <div class="page" data-page="4">
+    <div class="tag">SEASON 1 • SAMPLE CASES</div>
+    <h1>The Watch List</h1>
+    <h2>Six dramatized composite cases that demonstrate the format</h2>
+    <p>These six stories are samples — inspired by real road conditions in the Philippines. They are not the origin story. They exist to show how the 00:10 Protocol and the investigator team can work episode after episode.</p>
+    <div class="case-grid">
+      <div class="case-card"><strong>CASE #01</strong><p>Trike Driver<br>12:30 → 12:55</p></div>
+      <div class="case-card"><strong>CASE #02</strong><p>Balot Vendor</p></div>
+      <div class="case-card"><strong>CASE #03</strong><p>Student Rider</p></div>
+      <div class="case-card"><strong>CASE #04</strong><p>Night Shift Nurse</p></div>
+      <div class="case-card"><strong>CASE #05</strong><p>Delivery Rider</p></div>
+      <div class="case-card"><strong>CASE #06</strong><p>Lolo Tagapu</p></div>
+    </div>
+  </div>
+
+  <!-- PAGE 5 : Impact Model -->
+  <div class="page" data-page="5">
+    <div class="tag">IMPACT</div>
+    <h1>1 Episode = 1 Helmet</h1>
+    <p>Every episode sold or funded contributes to a real helmet for a rider who needs one.</p>
+    <p>The project is built so that storytelling and road safety are never separated. The stopped watch is both memorial and prevention.</p>
+    <div class="quote">
+      Stay Alive • Drive Aware • Save Lives<br>
+      No matter rich or poor — we only get one lifetime.
+    </div>
+  </div>
+
+  <!-- PAGE 6 : Cast -->
+  <div class="page" data-page="6">
+    <div class="tag">THE WATCH LIST CAST</div>
+    <h1>Investigators</h1>
+    <h2>A recurring team that frames each case</h2>
+    <p>Styled as a specialized unit that analyzes the exact second a watch stopped. Each member brings a different lens — pattern, physics, time, human factor.</p>
+    <div class="case-grid">
+      <div class="case-card"><strong>Blueflame B-01</strong><p>Pattern Analysis</p></div>
+      <div class="case-card"><strong>Grok G-02</strong><p>Impact Physics</p></div>
+      <div class="case-card"><strong>Gemini GM-03</strong><p>Time Decode</p></div>
+      <div class="case-card"><strong>Jotform J-04</strong><p>Human Factor</p></div>
+      <div class="case-card"><strong>Copilot C-05</strong><p>Systems</p></div>
+      <div class="case-card"><strong>Arias A-06</strong><p>Field</p></div>
+    </div>
+  </div>
+
+  <!-- PAGE 7 : Pledge -->
+  <div class="page" data-page="7">
+    <div class="tag">THE PLEDGE</div>
+    <h1>00:10 TO STAY ALIVE</h1>
+    <p>This is the standing invitation at the end of every episode:</p>
+    <div class="quote">
+      Take ten seconds.<br>
+      Pause. Look. Wait.<br>
+      Come home.
+    </div>
+    <p>In honor of everyone who came home safe — and as a warning that might still save the ones still on the road.</p>
+  </div>
+
+  <!-- PAGE 8 : Collaboration -->
+  <div class="page" data-page="8">
+    <div class="tag">FOR PARTNERS</div>
+    <h1>Collaboration Invitation</h1>
+    <p>The Stopped Watch is offered as a limited series / anthology format with a clear social-impact engine.</p>
+    <p><strong>What is available for discussion:</strong></p>
+    <p>• Series rights / adaptation rights<br>
+       • Format rights<br>
+       • Co-production or development partnership<br>
+       • Impact / helmet-fund partnership</p>
+    <p>Episode 0 is the true origin story. Episodes 1–6 are sample cases that demonstrate the scalable format.</p>
+    <p>A short NDA is available before sharing the full detailed treatment and voice-over script.</p>
+  </div>
+
+  <!-- PAGE 9 : Contact / Closing -->
+  <div class="page" data-page="9">
+    <div class="tag">CLOSING</div>
+    <h1>From a Work of Art</h1>
+    <p>The original painting <em>HORIZON</em> → the digital portrait of Lolo Tagapu → the 00:10 Protocol → a project that turns personal loss into a public warning.</p>
+    <div class="quote">
+      A watch that must be watched.<br>
+      Every second counts.
+    </div>
+    <p style="margin-top: 30px; color: var(--muted); font-size: 13px;">
+      © The Stopped Watch Project • All rights reserved<br>
+      This presentation is confidential and intended for evaluation purposes only.
+    </p>
+  </div>
+</div>
+
+<div class="nav">
+  <button id="prevBtn" onclick="changePage(-1)">← Previous</button>
+  <button id="nextBtn" onclick="changePage(1)">Next →</button>
+</div>
+
+<p class="footer-note">
+  Version B – Includes Episode 0 (true origin story) + sample cases.<br>
+  This public flipbook is a presentation tool. Full detailed treatment available under NDA.
+</p>
+
+<script>
+  const pages = document.querySelectorAll('.page');
+  const total = pages.length;
+  let current = 0;
+
+  document.getElementById('totalPages').textContent = total;
+
+  function showPage(index) {
+    pages.forEach((p, i) => {
+      p.classList.toggle('active', i === index);
+    });
+    current = index;
+    document.getElementById('currentPage').textContent = index + 1;
+    document.getElementById('prevBtn').disabled = index === 0;
+    document.getElementById('nextBtn').disabled = index === total - 1;
+  }
+
+  function changePage(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < total) {
+      showPage(next);
+    }
+  }
+
+  // Keyboard support
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') changePage(1);
+    if (e.key === 'ArrowLeft') changePage(-1);
+  });
+
+  // Touch swipe support
+  let touchStartX = 0;
+  document.querySelector('.book-container').addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+  document.querySelector('.book-container').addEventListener('touchend', e => {
+    const diff = e.changedTouches[0].screenX - touchStartX;
+    if (diff < -50) changePage(1);
+    if (diff > 50) changePage(-1);
+  });
+
+  showPage(0);
+</script>
+</body>
+</html>
